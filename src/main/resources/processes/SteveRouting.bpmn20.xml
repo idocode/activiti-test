@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:activiti="http://activiti.org/bpmn" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC" xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI" xmlns:modeler="http://activiti.com/modeler" typeLanguage="http://www.w3.org/2001/XMLSchema" expressionLanguage="http://www.w3.org/1999/XPath" targetNamespace="http://www.activiti.org/processdef" modeler:version="1.0en" modeler:exportDateTime="20150216104339475" modeler:modelId="933057" modeler:modelVersion="3" modeler:modelLastUpdated="1424083415708">
+  <signal id="cancelApplication" name="cancelApplication"></signal>
+  <process id="steveRouting" name="Steve Routing Process" isExecutable="true">
+    <userTask id="phonetask" name="Telephone interview" activiti:candidateGroups="dev-managers">
+      <documentation>Conduct a telephone interview with ${applicant.name}. Phone number = ${applicant.phoneNumber}</documentation>
+    </userTask>
+    <serviceTask id="scripttask1" name="Store resume" activiti:expression="${resumeService.storeResume()}"></serviceTask>
+    <sequenceFlow id="flow2" sourceRef="scripttask1" targetRef="phonetask"></sequenceFlow>
+    <startEvent id="startelement"></startEvent>
+    <sequenceFlow id="flow1" sourceRef="startelement" targetRef="scripttask1"></sequenceFlow>
+    <endEvent id="sid-088F6DA0-EA68-4A29-9BC3-76B9D5C5E2E0" name="rejected"></endEvent>
+    <sequenceFlow id="flow4" sourceRef="finaltask" targetRef="sid-088F6DA0-EA68-4A29-9BC3-76B9D5C5E2E0"></sequenceFlow>
+    <userTask id="finaltask" name="Final Task"></userTask>
+    <userTask id="nexttask" name="Next Task"></userTask>
+    <sequenceFlow id="flow13" sourceRef="phonetask" targetRef="nexttask"></sequenceFlow>
+    <exclusiveGateway id="exclusivegateway3" name="Exclusive Gateway" default="flow20"></exclusiveGateway>
+    <sequenceFlow id="flow14" sourceRef="nexttask" targetRef="exclusivegateway3"></sequenceFlow>
+    <exclusiveGateway id="exclusivegateway4" name="Exclusive Gateway"></exclusiveGateway>
+    <sequenceFlow id="flow19" sourceRef="exclusivegateway4" targetRef="phonetask">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${destination == 'phone'}]]></conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="flow20" sourceRef="exclusivegateway3" targetRef="finaltask"></sequenceFlow>
+    <sequenceFlow id="flow24" sourceRef="exclusivegateway3" targetRef="servicetask1">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${destination != null}]]></conditionExpression>
+    </sequenceFlow>
+    <serviceTask id="servicetask1" name="Routing Task" activiti:class="org.activiti.RoutingServiceTask"></serviceTask>
+    <sequenceFlow id="flow25" sourceRef="servicetask1" targetRef="exclusivegateway4"></sequenceFlow>
+    <sequenceFlow id="flow26" sourceRef="exclusivegateway4" targetRef="nexttask">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${destination == 'next'}]]></conditionExpression>
+    </sequenceFlow>
+  </process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_steveRouting">
+    <bpmndi:BPMNPlane bpmnElement="steveRouting" id="BPMNPlane_steveRouting">
+      <bpmndi:BPMNShape bpmnElement="phonetask" id="BPMNShape_phonetask">
+        <omgdc:Bounds height="80.0" width="100.0" x="220.0" y="185.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="scripttask1" id="BPMNShape_scripttask1">
+        <omgdc:Bounds height="80.0" width="100.0" x="80.0" y="185.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="startelement" id="BPMNShape_startelement">
+        <omgdc:Bounds height="35.0" width="35.0" x="20.0" y="208.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="sid-088F6DA0-EA68-4A29-9BC3-76B9D5C5E2E0" id="BPMNShape_sid-088F6DA0-EA68-4A29-9BC3-76B9D5C5E2E0">
+        <omgdc:Bounds height="35.0" width="35.0" x="798.0" y="219.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="finaltask" id="BPMNShape_finaltask">
+        <omgdc:Bounds height="55.0" width="105.0" x="620.0" y="197.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="nexttask" id="BPMNShape_nexttask">
+        <omgdc:Bounds height="55.0" width="105.0" x="400.0" y="197.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="exclusivegateway3" id="BPMNShape_exclusivegateway3">
+        <omgdc:Bounds height="40.0" width="40.0" x="540.0" y="205.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="exclusivegateway4" id="BPMNShape_exclusivegateway4">
+        <omgdc:Bounds height="40.0" width="40.0" x="279.0" y="337.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="servicetask1" id="BPMNShape_servicetask1">
+        <omgdc:Bounds height="55.0" width="105.0" x="400.0" y="330.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge bpmnElement="flow2" id="BPMNEdge_flow2">
+        <omgdi:waypoint x="180.0" y="225.0"></omgdi:waypoint>
+        <omgdi:waypoint x="220.0" y="225.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow1" id="BPMNEdge_flow1">
+        <omgdi:waypoint x="55.0" y="225.0"></omgdi:waypoint>
+        <omgdi:waypoint x="80.0" y="225.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow4" id="BPMNEdge_flow4">
+        <omgdi:waypoint x="725.0" y="224.0"></omgdi:waypoint>
+        <omgdi:waypoint x="798.0" y="236.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow13" id="BPMNEdge_flow13">
+        <omgdi:waypoint x="320.0" y="225.0"></omgdi:waypoint>
+        <omgdi:waypoint x="400.0" y="224.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow14" id="BPMNEdge_flow14">
+        <omgdi:waypoint x="505.0" y="224.0"></omgdi:waypoint>
+        <omgdi:waypoint x="540.0" y="225.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow19" id="BPMNEdge_flow19">
+        <omgdi:waypoint x="299.0" y="337.0"></omgdi:waypoint>
+        <omgdi:waypoint x="270.0" y="265.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow20" id="BPMNEdge_flow20">
+        <omgdi:waypoint x="580.0" y="225.0"></omgdi:waypoint>
+        <omgdi:waypoint x="620.0" y="224.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow24" id="BPMNEdge_flow24">
+        <omgdi:waypoint x="560.0" y="245.0"></omgdi:waypoint>
+        <omgdi:waypoint x="452.0" y="330.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow25" id="BPMNEdge_flow25">
+        <omgdi:waypoint x="400.0" y="357.0"></omgdi:waypoint>
+        <omgdi:waypoint x="319.0" y="357.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow26" id="BPMNEdge_flow26">
+        <omgdi:waypoint x="299.0" y="337.0"></omgdi:waypoint>
+        <omgdi:waypoint x="337.0" y="276.0"></omgdi:waypoint>
+        <omgdi:waypoint x="452.0" y="252.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</definitions>
